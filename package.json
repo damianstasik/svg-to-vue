@@ -1,7 +1,7 @@
 {
   "name": "svg-to-vue",
   "description": "Utility to convert SVG code into Vue component definition",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "keywords": [
     "vue",
     "svg",

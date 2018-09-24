@@ -6,6 +6,7 @@ module.exports = (content, options = {}) => {
   const {
     svgoConfig = {},
     svgoPath = null,
+    es6Export = false,
   } = options;
 
   let svg = Promise.resolve(content);
@@ -44,7 +45,7 @@ module.exports = (content, options = {}) => {
     });
 
     return `
-      module.exports = {
+      ${es6Export ? 'export default' : 'module.exports ='} {
         functional: true,
         render: ${renderFunction},
       };

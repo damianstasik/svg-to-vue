@@ -2,6 +2,9 @@
 <p align="center">Utility to convert SVG code into Vue component definition</p>
 
 ## Instalation
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/visualfanatic/svg-to-vue.svg)](https://greenkeeper.io/)
+
 ``` bash
 npm i svg-to-vue
 

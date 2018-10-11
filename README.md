@@ -36,7 +36,6 @@ svgToVue(code, {
     ],
   },
   svgoPath: 'some/path/to.svg',
-  esmExport: true,
 });
 ```
 
@@ -44,4 +43,3 @@ svgToVue(code, {
 | - | - | - | - |
 | `svgoConfig` | `Object`/`Boolean` | `{}` | Configuration object passed to SVGO or `false` to disable optimization |
 | `svgoPath` | `String` | `null` | Path to SVG file which is used by SVGO `prefixIds` plugin to generate unique IDs |
-| `esmExport` | `Boolean` | `false` | Module export format: `true` for EcmaScript or `false` for CommonJS |

@@ -33,7 +33,7 @@ module.exports = (content, options = {}) => {
 
     renderFunction = `
       function render(_h, _vm) {
-        ${renderFunction};
+        ${renderFunction}
       }
     `;
 
@@ -46,8 +46,8 @@ module.exports = (content, options = {}) => {
     return `
       export default {
         functional: true,
-        render: ${renderFunction},
-      };
+        render: ${renderFunction}
+      }
     `;
   });
 };

@@ -14,6 +14,7 @@
   "main": "index.js",
   "dependencies": {
     "svgo": "^1.1.1",
+    "vue-functional-data-merge": "^2.0.7",
     "vue-template-compiler": "^2.5.17",
     "vue-template-es2015-compiler": "^1.6.0"
   },

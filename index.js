@@ -18,17 +18,7 @@ module.exports = (content, options = {}) => {
 
   return svg.then((result) => {
     let { render: renderFunction } = compile(result, {
-      preserveWhitespace: false,
-      modules: [
-        {
-          transformNode: (el) => {
-            if (el.tag === 'svg') {
-              el.classBinding = '[data.class, data.staticClass]';
-              el.styleBinding = '[data.style, data.staticStyle]';
-            }
-          },
-        },
-      ],
+      preserveWhitespace: false
     });
 
     renderFunction = `
@@ -44,9 +34,18 @@ module.exports = (content, options = {}) => {
     });
 
     return `
+      import {mergeData} from 'vue-functional-data-merge';
+    
+      function createRender(realRender) {
+        return function render(_h1, _vm) {
+          function _h(tag, data, children) { return _h1(tag, mergeData(data, _vm.data), children); }
+          return realRender(_h, _vm);
+        }
+      }
+    
       export default {
         functional: true,
-        render: ${renderFunction}
+        render: createRender(${renderFunction})
       }
     `;
   });

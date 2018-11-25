@@ -69,7 +69,7 @@ module.exports = (content, options = {}) => {
       export default {
         functional: true,
         render(_h, _vm) {
-          const { _c, _v, data } = _vm;
+          const { _c, _v, data, children = [] } = _vm;
 
           const {
             class: classNames,
@@ -88,7 +88,7 @@ module.exports = (content, options = {}) => {
               attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs),
               ...rest,
             },
-            ${transformChildren(ast.children)}
+            children.concat(${transformChildren(ast.children)})
           )
         }
       }

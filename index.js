@@ -46,6 +46,8 @@ const transformChildren = (value) => {
   return `[${chilldren.join()}]`;
 };
 
+const stringify = value => value.filter(item => item).join();
+
 module.exports = (content, options = {}) => {
   const {
     svgoConfig = {},
@@ -65,6 +67,17 @@ module.exports = (content, options = {}) => {
       preserveWhitespace: false,
     });
 
+    const children = ast.children.length
+      ? `children.concat(${transformChildren(ast.children)})`
+      : 'children';
+
+    const attrs = Object.keys(ast.attrsMap).length
+      ? `attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs)`
+      : 'attrs';
+
+    const classNames = stringify([ast.staticClass, 'classNames', 'staticClass']);
+    const styles = stringify([ast.staticStyle, 'style', 'staticStyle']);
+
     return `
       export default {
         functional: true,
@@ -83,12 +96,12 @@ module.exports = (content, options = {}) => {
           return _c(
             'svg',
             {
-              class: [${ast.staticClass}, classNames, staticClass],
-              style: [${ast.staticStyle}, style, staticStyle],
-              attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs),
+              class: [${classNames}],
+              style: [${styles}],
+              ${attrs},
               ...rest,
             },
-            children.concat(${transformChildren(ast.children)})
+            ${children}
           )
         }
       }

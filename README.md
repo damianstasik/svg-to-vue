@@ -3,9 +3,9 @@
 
 ## Instalation
 ``` bash
-npm i svg-to-vue
+npm i svg-to-vue vue-template-compiler
 
-yarn add svg-to-vue
+yarn add svg-to-vue vue-template-compiler
 ```
 
 ## Usage

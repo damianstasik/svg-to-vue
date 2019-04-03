@@ -44,7 +44,7 @@ module.exports = (content, options = {}) => {
     });
 
     return `
-      export default {
+      module.exports = {
         functional: true,
         render: ${renderFunction}
       }

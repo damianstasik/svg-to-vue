@@ -13,7 +13,7 @@ module.exports = (content, options = {}) => {
   if (svgoConfig !== false) {
     svg = new SVGO(svgoConfig)
       .optimize(content, { path: svgoPath })
-      .then(result => result.data);
+      .then((result) => result.data);
   }
 
   return svg.then((result) => {

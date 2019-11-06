@@ -3,7 +3,7 @@ module.exports = {
   env: {
     node: true,
   },
-  extends: ['airbnb-base'],
+  extends: 'airbnb-base',
   rules: {
     'no-param-reassign': ['error', {
       props: false,

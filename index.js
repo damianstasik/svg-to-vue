@@ -71,6 +71,8 @@ module.exports = (content, options = {}) => {
       ? `children.concat(${transformChildren(ast.children)})`
       : 'children';
 
+    delete ast.attrsMap.class;
+
     const attrs = Object.keys(ast.attrsMap).length
       ? `attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs)`
       : 'attrs';

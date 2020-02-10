@@ -18,11 +18,19 @@ const code = `
   </svg>
 `;
 
+// Promise
 svgToVue(code)
   .then((component) => {
     // `component` contains Vue component definition
     console.log(component);
   });
+
+
+// Async/await
+const component = await svgToVue(code);
+
+// `component` contains Vue component definition
+console.log(component);
 ```
 
 ## API

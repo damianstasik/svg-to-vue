@@ -16,6 +16,6 @@ module.exports = (content, options = {}) => {
   }
 
   return svg.then((result) => {
-    return parseComponent('<template functional>' + file.replace('<svg', '<svg v-bind="data.attrs" :class="data.staticClass" :style="data.staticStyle"') + '</template>', options);
+    return parseComponent('<template functional>' + result.replace('<svg', '<svg v-bind="data.attrs" :class="data.staticClass" :style="data.staticStyle"') + '</template>', options);
   });
 };

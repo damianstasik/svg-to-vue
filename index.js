@@ -5,6 +5,7 @@ module.exports = (content, options = {}) => {
   const {
     svgoConfig = {},
     svgoPath = null,
+    vueConfig = {},
   } = options;
 
   let svg = Promise.resolve(content);
@@ -16,6 +17,9 @@ module.exports = (content, options = {}) => {
   }
 
   return svg.then((result) => {
-    return parseComponent('<template functional>' + result.replace('<svg', '<svg v-bind="data.attrs" :class="data.staticClass" :style="data.staticStyle"') + '</template>', options);
+    return parseComponent('<template functional>' + result.replace('<svg', '<svg v-bind="data.attrs" :class="data.staticClass" :style="data.staticStyle"') + '</template>',
+      preserveWhitespace: false,
+      ...vueConfig,
+    });
   });
 };

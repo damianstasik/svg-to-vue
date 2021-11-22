@@ -1,4 +1,4 @@
-const SVGO = require('svgo');
+const { optimize } = require('svgo');
 const { compile } = require('vue-template-compiler');
 
 const transformChildren = (value) => {
@@ -46,7 +46,56 @@ const transformChildren = (value) => {
   return `[${chilldren.join()}]`;
 };
 
-const stringify = (value) => value.filter((item) => item).join();
+const stringify = (value) => value.filter((item) => item)
+  .join();
+
+function transform(result) {
+  const { ast } = compile(result, {
+    preserveWhitespace: false,
+  });
+
+  const children = ast.children.length
+    ? `children.concat(${transformChildren(ast.children)})`
+    : 'children';
+
+  delete ast.attrsMap.class;
+
+  const attrs = Object.keys(ast.attrsMap).length
+    ? `attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs)`
+    : 'attrs';
+
+  const classNames = stringify([ast.staticClass, 'classNames', 'staticClass']);
+  const styles = stringify([ast.staticStyle, 'style', 'staticStyle']);
+
+  return Promise.resolve(`
+    module.exports = {
+      functional: true,
+      render(_h, _vm) {
+        const { _c, _v, data, children = [] } = _vm;
+        
+        const {
+          class: classNames,
+          staticClass,
+          style,
+          staticStyle,
+          attrs = {},
+          ...rest
+        } = data;
+        
+        return _c(
+          'svg',
+          {
+            class: [${classNames}],
+            style: [${styles}],
+            ${attrs},
+            ...rest,
+          },
+          ${children} 
+        )
+      }
+    }
+  `);
+}
 
 module.exports = (content, options = {}) => {
   const {
@@ -54,59 +103,14 @@ module.exports = (content, options = {}) => {
     svgoPath = null,
   } = options;
 
-  let svg = Promise.resolve(content);
-
-  if (svgoConfig !== false) {
-    svg = new SVGO(svgoConfig)
-      .optimize(content, { path: svgoPath })
-      .then((result) => result.data);
+  if (svgoConfig === false) {
+    return transform(content);
   }
 
-  return svg.then((result) => {
-    const { ast } = compile(result, {
-      preserveWhitespace: false,
-    });
+  const config = {
+    ...svgoConfig,
+    path: svgoPath,
+  };
 
-    const children = ast.children.length
-      ? `children.concat(${transformChildren(ast.children)})`
-      : 'children';
-
-    delete ast.attrsMap.class;
-
-    const attrs = Object.keys(ast.attrsMap).length
-      ? `attrs: Object.assign(${JSON.stringify(ast.attrsMap)}, attrs)`
-      : 'attrs';
-
-    const classNames = stringify([ast.staticClass, 'classNames', 'staticClass']);
-    const styles = stringify([ast.staticStyle, 'style', 'staticStyle']);
-
-    return `
-      module.exports = {
-        functional: true,
-        render(_h, _vm) {
-          const { _c, _v, data, children = [] } = _vm;
-
-          const {
-            class: classNames,
-            staticClass,
-            style,
-            staticStyle,
-            attrs = {},
-            ...rest
-          } = data;
-
-          return _c(
-            'svg',
-            {
-              class: [${classNames}],
-              style: [${styles}],
-              ${attrs},
-              ...rest,
-            },
-            ${children}
-          )
-        }
-      }
-    `;
-  });
+  return transform(optimize(content, config).data);
 };
